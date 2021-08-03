@@ -2,7 +2,7 @@ import * as React from 'react'
 import {Switch} from '../switch'
 
 const ToggleContext = React.createContext()
-ToggleContext.displayName = 'toggle context'
+ToggleContext.displayName = 'ToggleContext'
 function Toggle({children}) {
   const [on, setOn] = React.useState(false)
   const toggle = () => setOn(!on)
@@ -12,7 +12,11 @@ function Toggle({children}) {
   )
 }
 function useToggle() {
-  return React.useContext(ToggleContext)
+  const context = React.useContext(ToggleContext)
+  if (!context) {
+    throw new Error('useToggle must be used with a <Toggle/>')
+  }
+  return context
 }
 
 //  if you care only about direct decent
@@ -43,19 +47,20 @@ const MyToggleButton = () => {
 }
 
 const allowedTypes = [ToggleOn, ToggleOff, ToggleButton]
-function App() {
-  return (
-    <div>
-      <Toggle>
-        <ToggleOn>The button is on</ToggleOn>
-        <ToggleOff>The button is off</ToggleOff>
-        <ToggleButton />
-        <span />
-        <MyToggleButton />
-      </Toggle>
-    </div>
-  )
-}
+const App = () => <ToggleButton />
+// function App() {
+//   return (
+//     <div>
+//       <Toggle>
+//         <ToggleOn>The button is on</ToggleOn>
+//         <ToggleOff>The button is off</ToggleOff>
+//         <ToggleButton />
+//         <span />
+//         <MyToggleButton />
+//       </Toggle>
+//     </div>
+//   )
+// }
 
 export default App
 
